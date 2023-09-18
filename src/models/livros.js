@@ -12,7 +12,7 @@ const schema = new mongoose.Schema({
     required: "Este campo é obrigatório",
   },
   codigoISBN: {
-    type: Number,
+    type: String,
     required: "Este campo é obrigatório",
   },
   editora: {

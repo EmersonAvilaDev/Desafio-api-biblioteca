@@ -1,5 +1,5 @@
 const routes = (app) => {
-  app.use("/users", require("./routes/users"));
+  app.use("/livro", require("./routes/livros"));
   return;
 };
 
