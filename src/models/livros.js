@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
   id: {
-    type: Number,
+    type: String,
     unique: true,
     required: "Este campo é obrigatório",
     index: true
@@ -14,7 +14,7 @@ const schema = new mongoose.Schema({
     index: true
   },
   num_paginas: {
-    type: Number,
+    type: String,
     required: "Este campo é obrigatório",
   },
   isbn: {

@@ -20,3 +20,8 @@ Antes de tudo, você precisa ter certeza de que instalou todas as dependências 
 3) Depois é só executar o comando ```npm install``` no terminal na pasta raiz do projeto.
 4) Em seguida, vocÊ pode executar o comando ```npm run dev``` no terminal na pasta raiz do projeto para iniciar o servidor.
 5) Depois entre na documentação da API acessando o link: ```http://localhost:4000/```
+
+
+## Deploy:
+
+- O link é ```https://heartfelt-cassata-781283.netlify.app/```
