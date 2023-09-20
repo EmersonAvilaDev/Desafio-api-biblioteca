@@ -1,19 +1,27 @@
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
+  id: {
+    type: Number,
+    unique: true,
+    required: "Este campo é obrigatório",
+    index: true
+  },
   titulo: {
     type: String,
     unique: true,
     required: "Este campo é obrigatório",
     index: true
   },
-  numeroPaginas: {
+  num_paginas: {
     type: Number,
     required: "Este campo é obrigatório",
   },
-  codigoISBN: {
+  isbn: {
     type: String,
+    unique: true,
     required: "Este campo é obrigatório",
+    index: true
   },
   editora: {
     type: String,

@@ -4,15 +4,16 @@ const handleExpectedError = require("../functions/handleExpectedErrors");
 const esquemaLivros = require("../models/livros");
 const router = express.Router();
 
-router.post("/cadastrar", connectDB, async function (req, res) {
+router.post("/cadastro", connectDB, async function (req, res) {
   try {
-    // #swagger.tags = ['Livro']
-    let { titulo, numeroPaginas, codigoISBN, editora } = req.body;
+    // #swagger.tags = ['Livros']
+    let { id, titulo, num_paginas, isbn, editora } = req.body;
 
     const respostaDB = await esquemaLivros.create({
+      id,
       titulo,
-      numeroPaginas,
-      codigoISBN,
+      num_paginas,
+      isbn,
       editora,
     });
 
@@ -29,28 +30,30 @@ router.post("/cadastrar", connectDB, async function (req, res) {
   }
 });
 
-router.put("/editar/:id", connectDB, async function (req, res) {
+router.put("/editar/:livroId", connectDB, async function (req, res) {
   try {
-    // #swagger.tags = ['Livro']
+    // #swagger.tags = ['Livros']
     let idLivro = req.params.id;
-    let { titulo, numeroPaginas, codigoISBN, editora } = req.body;
 
-    const checkLivro = await esquemaLivros.findById({ _id: idLivro });
+    let { id, titulo, num_paginas, isbn, editora } = req.body;
+
+    const checkLivro = await esquemaLivros.findOne({ livroId: idLivro });
     if (!checkLivro) {
       throw new Error("Este livro não foi encontrado!");
     }
 
     const livroAtualizado = await esquemaLivros.updateOne(
-      { _id: idLivro },
+      { livroId: idLivro },
       {
+        id,
         titulo,
-        numeroPaginas,
-        codigoISBN,
+        num_paginas,
+        isbn,
         editora,
       }
     );
     if (livroAtualizado?.modifiedCount > 0) {
-      const dadosLivro = await esquemaLivros.findById({ _id: idLivro });
+      const dadosLivro = await esquemaLivros.findOne({ livroId: idLivro });
 
       res.status(200).json({
         status: "OK",
@@ -62,11 +65,10 @@ router.put("/editar/:id", connectDB, async function (req, res) {
     return handleExpectedError(res, error);
   }
 });
-module.exports = router;
 
 router.get("/obter/livros", connectDB, async function (req, res) {
   try {
-    // #swagger.tags = ['Livro']
+    // #swagger.tags = ['Livros']
     // #swagger.description = 'Endpoint para obter todas os livros.'
 
     const respostaDB = await esquemaLivros.find({});
@@ -81,24 +83,48 @@ router.get("/obter/livros", connectDB, async function (req, res) {
   }
 });
 
-router.delete("/deletar/livro/:id", connectDB, async function (req, res) {
+router.get("/obter/livros/:livroId", connectDB, async function (req, res) {
   try {
-    // #swagger.tags = ['Livro']
-    const idLivro = req.params.id;
+    // #swagger.tags = ['Livros']
 
-    const checkLivro = await esquemaLivros.findById({ _id: idLivro });
-    if (!checkLivro) {
+    let idLivro = req.params.id;
+
+    const respostaDB = await esquemaLivros.findOne({ livroId: idLivro });
+
+    if (!respostaDB) {
       throw new Error("Este livro não foi encontrado!");
     }
 
-    const respostaDB = await esquemaLivros.deleteOne({_id: idLivro});
-
     res.status(200).json({
       status: "OK",
-      statusMensagem: "Livros deletado com sucesso!",
+      statusMensagem: "Livro listado com sucesso!",
       resposta: respostaDB,
     });
   } catch (error) {
     return handleExpectedError(res, error);
   }
 });
+
+router.delete("/deletar/:livroId", connectDB, async function (req, res) {
+  try {
+    // #swagger.tags = ['Livros']
+    const idLivro = req.params.id;
+
+    const checkLivro = await esquemaLivros.findOne({ livroId: idLivro });
+    if (!checkLivro) {
+      throw new Error("Este livro não foi encontrado!");
+    }
+
+    const respostaDB = await esquemaLivros.deleteOne({ livroId: idLivro });
+
+    res.status(200).json({
+      status: "OK",
+      statusMensagem: "Livro deletado com sucesso!",
+      resposta: respostaDB,
+    });
+  } catch (error) {
+    return handleExpectedError(res, error);
+  }
+});
+
+module.exports = router;
