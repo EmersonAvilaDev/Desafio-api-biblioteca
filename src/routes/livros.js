@@ -30,20 +30,20 @@ router.post("/cadastro", connectDB, async function (req, res) {
   }
 });
 
-router.put("/editar/:livroId", connectDB, async function (req, res) {
+router.put("/editar/:id", connectDB, async function (req, res) {
   try {
     // #swagger.tags = ['Livros']
     let idLivro = req.params.id;
 
     let { id, titulo, num_paginas, isbn, editora } = req.body;
 
-    const checkLivro = await esquemaLivros.findOne({ livroId: idLivro });
+    const checkLivro = await esquemaLivros.findOne({ id: idLivro });
     if (!checkLivro) {
       throw new Error("Este livro não foi encontrado!");
     }
 
     const livroAtualizado = await esquemaLivros.updateOne(
-      { livroId: idLivro },
+      { id: idLivro },
       {
         id,
         titulo,
@@ -53,7 +53,7 @@ router.put("/editar/:livroId", connectDB, async function (req, res) {
       }
     );
     if (livroAtualizado?.modifiedCount > 0) {
-      const dadosLivro = await esquemaLivros.findOne({ livroId: idLivro });
+      const dadosLivro = await esquemaLivros.findOne({ id: idLivro });
 
       res.status(200).json({
         status: "OK",
@@ -83,13 +83,14 @@ router.get("/obter/livros", connectDB, async function (req, res) {
   }
 });
 
-router.get("/obter/livros/:livroId", connectDB, async function (req, res) {
+router.get("/obter/livros/:id", connectDB, async function (req, res) {
   try {
     // #swagger.tags = ['Livros']
 
     let idLivro = req.params.id;
+    console.log(idLivro);
 
-    const respostaDB = await esquemaLivros.findOne({ livroId: idLivro });
+    const respostaDB = await esquemaLivros.findOne({ id: idLivro });
 
     if (!respostaDB) {
       throw new Error("Este livro não foi encontrado!");
@@ -105,17 +106,17 @@ router.get("/obter/livros/:livroId", connectDB, async function (req, res) {
   }
 });
 
-router.delete("/deletar/:livroId", connectDB, async function (req, res) {
+router.delete("/deletar/:id", connectDB, async function (req, res) {
   try {
     // #swagger.tags = ['Livros']
     const idLivro = req.params.id;
 
-    const checkLivro = await esquemaLivros.findOne({ livroId: idLivro });
+    const checkLivro = await esquemaLivros.findOne({ id: idLivro });
     if (!checkLivro) {
       throw new Error("Este livro não foi encontrado!");
     }
 
-    const respostaDB = await esquemaLivros.deleteOne({ livroId: idLivro });
+    const respostaDB = await esquemaLivros.deleteOne({ id: idLivro });
 
     res.status(200).json({
       status: "OK",
